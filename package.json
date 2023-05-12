@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "install": "python3 narflinger.py && python3 -m venv /tmp/venv && . /tmp/venv/bin/activate && python3 -m pip install -r requirements-stealth.txt",
-    "start": "python3 server.py"
+    "install": "python3 narflinger.py && sh install.sh",
+    "start": "sh start.sh"
   },
   "narflinger": {
     "basenames": [
