@@ -6,7 +6,7 @@ app = flask.Flask(__name__)
 
 @app.route('/')
 def index():
-  return 'hi'
+  flask.send_file('idnex.html')
 
 @app.route('/test/<command>')
 def test(command):
