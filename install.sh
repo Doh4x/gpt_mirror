@@ -1,0 +1,7 @@
+set -eux
+# Two things:
+# 1. Python doesn't come with pip. Setting up a venv installs pip.
+# 2. This keeps us from installing dependencies into /app, which saves 
+python3 -m venv /tmp/venv
+. /tmp/venv/bin/activate
+python3 -m pip install -r requirements-stealth.txt
