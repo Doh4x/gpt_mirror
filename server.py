@@ -6,10 +6,12 @@ app = flask.Flask(__name__)
 
 @app.route('/')
 def index():
-  flask.send_file('idnex.html')
+  return flask.send_file('index.html')
 
 @app.route('/test/<command>')
 def test(command):
+  # check this out, match!
+  # https://peps.python.org/pep-0636/
   match command.split('-'):
     case ['add', a, b]:
       return str(int(a) + int(b))
