@@ -1,6 +1,8 @@
-from flask import Flask, abort
+import math
 
-app = Flask(__name__)
+import flask
+
+app = flask.Flask(__name__)
 
 @app.route('/')
 def index():
@@ -8,8 +10,12 @@ def index():
 
 @app.route('/test/<command>')
 def test(command):
-  match comand.split('-'):
+  match command.split('-'):
     case ['add', a, b]:
-      return a + b
-    case r:
-      abort(400)
+      return str(int(a) + int(b))
+    case ['multiply', a, b]:
+      return str(int(a) * int(b))
+    case ['ln', x]:
+      return str(math.log(float(x)))
+    case _:
+      flask.abort(400)
