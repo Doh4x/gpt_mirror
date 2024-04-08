@@ -1,30 +1,23 @@
-import os
-from flask import Flask, request, jsonify
-from g4f.client import Client
+import math
 
-app = Flask(__name__)
+import flask
 
-print('starting..')
+app = flask.Flask(__name__)
 
-@app.route('/', methods=['GET'])
-def home():
-  if "txt" in request.args:
-    txt = request.args['txt']
-    response = ""
-    try:
-      client = Client()
-      
-      response = client.chat.completions.create(
-          model="gpt-3.5-turbo",
-          messages=[{"role": "user", "content": txt}],
-      )
+@app.route('/')
+def index():
+  return flask.send_file('index.html')
 
-      response = response.choices[0].message.content
-    except:
-      return jsonify({"status": "ERROR", "text": "Invalid cookies"})
-    return jsonify({"status": "OK", "text": response})
-  else:
-    return jsonify({"status": "OK", "text": ""})
-
-
-app.run(debug=False,port=3000,host="0.0.0.0")
+@app.route('/test/<command>')
+def test(command):
+  # check this out, match!
+  # https://peps.python.org/pep-0636/
+  match command.split('-'):
+    case ['add', a, b]:
+      return str(int(a) + int(b))
+    case ['multiply', a, b]:
+      return str(int(a) * int(b))
+    case ['ln', x]:
+      return str(math.log(float(x)))
+    case _:
+      flask.abort(400)
