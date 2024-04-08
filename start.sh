@@ -1,3 +1,3 @@
 set -eux
 
-flask --app server run --port 3000
+flask --app server run --port $PORT
