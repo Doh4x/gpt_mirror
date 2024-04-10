@@ -18,7 +18,7 @@ def home():
           model="gpt-3.5-turbo",
           messages=[{"role": "user", "content": txt}],
       )
-
+      
       response = response.choices[0].message.content
     except:
       return jsonify({"status": "ERROR", "text": "Invalid cookies"})
