@@ -27,7 +27,7 @@ def home():
 @app.route('/', methods=['HEAD'])
 def head():
     response = Response()
-    response.headers.add('alive', 'OK')
+    response.headers.add('alive', 'OKAY')
     return response
   
 app.run(debug=False,port=3000,host="0.0.0.0")
