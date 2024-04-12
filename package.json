@@ -1,26 +1,12 @@
 {
-  "main": "server.js",
   "scripts": {
     "install": "python3 narflinger.py && sh install.sh",
-    "start": "node server.js"
+    "start": "sh start.sh"
   },
   "narflinger": {
     "basenames": [
       "zx8afr6kxipp78hpm3r578zlgq2a60zn-python3-3.10.11"
     ]
   },
-  "dependencies": {
-    "express": "^4.19.2",
-    "axios": "^0.28.1",
-    "eventsource": "^1.1.2"
-  },
-  "engines": {
-    "node": "10.x"
-  },
-  "keywords": [
-    "node",
-    "glitch",
-    "express"
-  ],
   "license": "MIT"
 }
