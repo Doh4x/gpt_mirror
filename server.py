@@ -7,6 +7,9 @@ app = Flask(__name__)
 print('starting..')
 
 @app.route('/', methods=['GET'])
+
+2dsfsdafd
+
 def home():
   if "txt" in request.args:
     txt = request.args['txt']
