@@ -4,11 +4,7 @@ from g4f.client import Client
 
 app = Flask(__name__)
 
-print('starting..')
-
 @app.route('/', methods=['GET'])
-@app.route('/', methods=['HEAD'])
-
 def home():
   if "txt" in request.args:
     txt = request.args['txt']
@@ -28,5 +24,10 @@ def home():
   else:
     return jsonify({"status": "OK", "text": ""})
 
-
+@app.route('/', methods=['HEAD'])
+def head():
+    response = Response()
+    response.headers.add('content-length')
+    return response
+  
 app.run(debug=False,port=3000,host="0.0.0.0")
