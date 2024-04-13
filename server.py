@@ -4,20 +4,25 @@ from g4f.client import Client
 
 app = Flask(__name__)
 
+client = Client()
+
 @app.route('/', methods=['GET'])
+
 def home():
   if "txt" in request.args:
     txt = request.args['txt']
     response = ""
-    try:
-      client = Client()
-      
+    
+    try:  
       response = client.chat.completions.create(
-          model="gpt-3.5",
+          model='pi',
           messages=[{"role": "user", "content": txt}],
       )
       
-      response = response.choices[0].message.content
+      print("GOT REQUEST")
+      print(response)
+      
+      response = response
     except:
       return jsonify({"status": "ERROR", "text": "Invalid cookies"})
     return jsonify({"status": "OK", "text": response})
@@ -25,6 +30,7 @@ def home():
     return jsonify({"status": "OK", "text": ""})
 
 @app.route('/', methods=['HEAD'])
+
 def head():
     response = Response()
     response.headers.add('alive', 'OKAY')
