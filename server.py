@@ -1,18 +1,24 @@
 import os
 
+from os.path import join, dirname
+from dotenv import load_dotenv
+
 from flask import Flask, request, jsonify
 from g4f.client import Client
 from g4f.cookies import set_cookies
+
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 app = Flask(__name__)
 
 ai_providers = ['gemini',  'gemini-pro']
 
 set_cookies(".google.com", {
-   "__Secure-1PSID": os.environ['gemini_cookie'],
-   "gemini_cookie[__Secure-1PSIDCC]": os.environ['gemini_cookie'],
-   "__Secure-1PSID": os.environ['gemini_cookie'],
-   "__Secure-1PSID": os.environ['gemini_cookie'],
+   "__Secure-1PSID": os.environ.get('__Secure-1PSID'),
+   "__Secure-1PSIDCC": os.environ.get('__Secure-1PSIDCC'),
+   "__Secure-1PSIDTS": os.environ.get('__Secure-1PSIDTS'),
+   "SSID": os.environ.get('SSID'),
 })
 
 client = Client()
