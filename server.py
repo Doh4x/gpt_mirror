@@ -13,7 +13,7 @@ load_dotenv(dotenv_path)
 
 app = Flask(__name__)
 
-ai_providers = ['gemini']
+ai_providers = ['gpt-3.5-turbo', 'gpt-4']
 
 set_cookies(".google.com", {
    "__Secure-1PSID": os.environ.get('__Secure-1PSID'),
@@ -21,8 +21,6 @@ set_cookies(".google.com", {
    "__Secure-1PSIDTS": os.environ.get('__Secure-1PSIDTS'),
    "SSID": os.environ.get('SSID'),
 })
-
-client = Client()
 
 @app.route('/', methods=['GET'])
 
@@ -32,10 +30,10 @@ def home():
     response = ""
     valid_provider = ""
     
+    client = Client()
+      
     for provider in ai_providers:
       try:
-        print(provider, flush=True)
-      
         response = client.chat.completions.create(
             model=provider,
             messages=[{"role": "user", "content": txt}],
