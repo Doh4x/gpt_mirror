@@ -2,7 +2,6 @@ import os
 
 from os.path import join, dirname
 from dotenv import load_dotenv
-from waitress import serve
 from flask import Flask, request, jsonify
 
 from g4f.client import Client
@@ -14,7 +13,7 @@ load_dotenv(dotenv_path)
 app = Flask(__name__)
 client = Client()
 
-ai_providers = ['gpt-3.5-turbo', 'gemini', 'gpt-4']
+ai_providers = ['gpt-3.5-turbo', 'llama2-7b', 'gpt-4']
 
 set_cookies(".google.com", {
    "__Secure-1PSID": os.environ.get('__Secure-1PSID'),
@@ -39,7 +38,7 @@ def home():
             model=provider,
             messages=[{"role": "user", "content": txt}],
         )
-
+        
         if response.choices[0].message.content == "\u5f53\u524d\u5730\u533a\u5f53\u65e5\u989d\u5ea6\u5df2\u6d88\u8017\u5b8c, \u8bf7\u5c1d\u8bd5\u66f4\u6362\u7f51\u7edc\u73af\u5883":
           continue
         
