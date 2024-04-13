@@ -2,8 +2,9 @@ import os
 
 from os.path import join, dirname
 from dotenv import load_dotenv
-
+from waitress import serve
 from flask import Flask, request, jsonify
+
 from g4f.client import Client
 from g4f.cookies import set_cookies
 
@@ -12,7 +13,7 @@ load_dotenv(dotenv_path)
 
 app = Flask(__name__)
 
-ai_providers = ['gemini',  'gemini-pro']
+ai_providers = ['gemini']
 
 set_cookies(".google.com", {
    "__Secure-1PSID": os.environ.get('__Secure-1PSID'),
@@ -33,9 +34,7 @@ def home():
     
     for provider in ai_providers:
       try:
-        print(provider, os.environ['gemini_cookie'], flush=True)
-        
-        client = Client()
+        print(provider, flush=True)
       
         response = client.chat.completions.create(
             model=provider,
@@ -63,7 +62,7 @@ def home():
 
 def head():
     response = Response()
-    response.headers.add('alive', 'OKAY')
+    response.headers.add('alive', 'OK')
     return response
-  
-app.run(debug=False,port=3000,host="0.0.0.0")
+
+serve(app, host="0.0.0.0", port=3000)
