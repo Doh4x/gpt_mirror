@@ -13,7 +13,7 @@ load_dotenv(dotenv_path)
 app = Flask(__name__)
 client = Client()
 
-ai_providers = ['gpt-3.5-turbo', 'llama2-70b', 'dolphin-mixtral-8x7b', 'gpt-4']
+ai_providers = ['gpt-3.5-turbo', 'llama2-70b', 'gpt-4', 'dolphin-mixtral-8x7b']
 
 set_cookies(".google.com", {
    "__Secure-1PSID": os.environ.get('__Secure-1PSID'),
