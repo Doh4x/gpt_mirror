@@ -12,8 +12,9 @@ dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
 app = Flask(__name__)
+client = Client()
 
-ai_providers = ['gpt-3.5-turbo', 'gpt-4']
+ai_providers = ['gpt-3.5-turbo', 'gemini', 'gpt-4']
 
 set_cookies(".google.com", {
    "__Secure-1PSID": os.environ.get('__Secure-1PSID'),
@@ -22,6 +23,7 @@ set_cookies(".google.com", {
    "SSID": os.environ.get('SSID'),
 })
 
+  
 @app.route('/', methods=['GET'])
 
 def home():
@@ -29,10 +31,9 @@ def home():
     txt = request.args['txt']
     response = ""
     valid_provider = ""
-    
-    client = Client()
       
     for provider in ai_providers:
+      print(provider, flush=True)
       try:
         response = client.chat.completions.create(
             model=provider,
@@ -50,9 +51,10 @@ def home():
         continue
 
     if response == "":
-       return jsonify({"status": "NOT OK", "text": "Invalid cookies", "provider": valid_provider})
-      
-    return jsonify({"status": "OK", "text": response, "provider": valid_provider})
+       return jsonify({"status": "NOT OK", "text": "Invalid cookies", "provider": ""})
+    
+    print(response, flush=True)
+    return jsonify({"status": "OK", "text": response or "", "provider": valid_provider})
   else:
     return jsonify({"status": "OK", "text": ""})
 
@@ -63,4 +65,5 @@ def head():
     response.headers.add('alive', 'OK')
     return response
 
-serve(app, host="0.0.0.0", port=3000)
+app.run(debug=False,port=3000,host="0.0.0.0")
+#serve(app, host="0.0.0.0", port=3000)
