@@ -1,4 +1,6 @@
 import os
+import sys
+
 from flask import Flask, request, jsonify
 from g4f.client import Client
 
@@ -6,26 +8,27 @@ app = Flask(__name__)
 
 client = Client()
 
+print('This is error output', file=sys.stderr)
+print('This is standard output', file=sys.stdout)
+
 @app.route('/', methods=['GET'])
 
 def home():
+  print("GOT REQUEST")
+  
   if "txt" in request.args:
     txt = request.args['txt']
     response = ""
-    
-    try:  
+  
+    try:   
       response = client.chat.completions.create(
           model='pi',
           messages=[{"role": "user", "content": txt}],
       )
       
-      print("GOT REQUEST")
-      print(response)
-      
       response = response
-    except:
-      return jsonify({"status": "ERROR", "text": "Invalid cookies"})
-    return jsonify({"status": "OK", "text": response})
+    finally:
+      return jsonify({"status": "OK", "text": response})
   else:
     return jsonify({"status": "OK", "text": ""})
 
