@@ -17,14 +17,12 @@ def home():
     response = ""
   
     try:
-      response = client.chat.completions.create(
+       response = client.chat.completions.create(
           model='llama2-7b',
           messages=[{"role": "user", "content": txt}],
-      )
-      
-      print("request.args", flush=True)
+       )
         
-      response = response.choices[0].message.content
+       response = response.choices[0].message.content
     finally:
      return jsonify({"status": "OK", "text": response})
   else:
