@@ -7,24 +7,34 @@ app = Flask(__name__)
 
 client = Client()
 
-@app.route('/', methods=['GET'])
+ai_providers = ['gpt-3.5-turbo', 'llama2-7b', 'gpt-4']
 
-providers = ['init']
+@app.route('/', methods=['GET'])
 
 def home():
   if "txt" in request.args:
     txt = request.args['txt']
     response = ""
-  
-    try:
-       response = client.chat.completions.create(
-          model='llama2-7b',
-          messages=[{"role": "user", "content": txt}],
-       )
+    
+    for provider in ai_providers:
+      try:
+        client = Client()
+      
+        response = client.chat.completions.create(
+            model=provider,
+            messages=[{"role": "user", "content": txt}],
+        )
+
+        response = response.choices[0].message.content
         
-       response = response.choices[0].message.content
-    finally:
-     return jsonify({"status": "OK", "text": response})
+        break
+      except:
+        continue
+
+    if response == "":
+       return jsonify({"status": "NOT OK", "text": "Invalid cookies"})
+      
+    return jsonify({"status": "OK", "text": response})
   else:
     return jsonify({"status": "OK", "text": ""})
 
