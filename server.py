@@ -9,24 +9,24 @@ client = Client()
 
 @app.route('/', methods=['GET'])
 
+providers = ['init']
+
 def home():
   if "txt" in request.args:
     txt = request.args['txt']
     response = ""
   
-    print(txt, flush=True)
-    
-    #try:
-    response = client.chat.completions.create(
-          model='pi',
+    try:
+      response = client.chat.completions.create(
+          model='llama2-7b',
           messages=[{"role": "user", "content": txt}],
-    )
+      )
       
-    print("request.args", flush=True)
+      print("request.args", flush=True)
         
-    response = response.choices[0].message.content
-   # finally:
-    return jsonify({"status": "OK", "text": response})
+      response = response.choices[0].message.content
+    finally:
+     return jsonify({"status": "OK", "text": response})
   else:
     return jsonify({"status": "OK", "text": ""})
 
