@@ -33,7 +33,10 @@ def home():
       
     for provider in ai_providers:
       print(provider, flush=True)
+      
       try:
+        client = Client()
+        
         response = client.chat.completions.create(
             model=provider,
             messages=[{"role": "user", "content": txt}],
@@ -42,6 +45,9 @@ def home():
         if response.choices[0].message.content == "\u5f53\u524d\u5730\u533a\u5f53\u65e5\u989d\u5ea6\u5df2\u6d88\u8017\u5b8c, \u8bf7\u5c1d\u8bd5\u66f4\u6362\u7f51\u7edc\u73af\u5883":
           continue
         
+        print(provider, flush=True)
+        print(response.choices[0].message.model, flush=True)
+            
         response = response.choices[0].message.content
         valid_provider = provider
         
@@ -52,7 +58,6 @@ def home():
     if response == "":
        return jsonify({"status": "NOT OK", "text": "Invalid cookies", "provider": ""})
     
-    print(response, flush=True)
     return jsonify({"status": "OK", "text": response or "", "provider": valid_provider})
   else:
     return jsonify({"status": "OK", "text": ""})
