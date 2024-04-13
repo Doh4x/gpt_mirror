@@ -8,10 +8,10 @@ app = Flask(__name__)
 
 client = Client()
 set_cookies(".google.com", {
-  "__Secure-1PSID": "cookie value"
+  "__Secure-1PSID": os[].
 })
 
-ai_providers = ['gemini', 'gemini-pro', 'gpt-4']
+ai_providers = ['gpt-4']
 
 @app.route('/', methods=['GET'])
 
