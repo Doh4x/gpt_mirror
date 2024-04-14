@@ -2,7 +2,7 @@ import os
 
 from os.path import join, dirname
 from dotenv import load_dotenv
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from waitress import serve
 
 import g4f
@@ -15,13 +15,13 @@ load_dotenv(dotenv_path)
 app = Flask(__name__)
 
 ai_models = ['gpt-3.5-long', 'gpt-3.5-turbo', 'llama2-70b', 'dolphin-mixtral-8x7b']
-
 gpt35_error_messages = [
   '\u6d41\u91cf\u5f02\u5e38,\u8bf7\u5c1d\u8bd5\u66f4\u6362\u7f51\u7edc\u73af\u5883', 
   '\u5f53\u524d\u5730\u533a\u5f53\u65e5\u989d\u5ea6\u5df2\u6d88\u8017\u5b8c, \u8bf7\u5c1d\u8bd5\u66f4\u6362\u7f51\u7edc\u73af\u5883'
 ]
 
 @app.route('/try_models', methods=['GET'])
+
 def try_models():
   if "txt" in request.args:
     txt = request.args['txt']
@@ -101,7 +101,13 @@ def single_model_request():
     return jsonify({"status": "OK", "text": response or "", "provider": valid_provider, "tries_used": current_try})
   else:
     return jsonify({"status": "OK", "text": ""})
-  
+
+@app.route('/awake', methods=['GET'])
+
+def awake():
+    response = Response()
+    response.headers.add('alive', 'OK')
+    return response
 
 @app.route('/', methods=['HEAD'])
 
