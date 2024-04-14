@@ -4,6 +4,7 @@ from os.path import join, dirname
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 
+import g4f
 from g4f.client import Client
 from g4f.cookies import set_cookies
 
@@ -13,12 +14,12 @@ load_dotenv(dotenv_path)
 app = Flask(__name__)
 client = Client()
 
-ai_models = ['gpt-3.5-turbo', 'llama2-70b', 'dolphin-mixtral-8x7b']
-ai_providers = [
-  'gpt-3.5-turbo']=g4f.Provider.Liaobots,
-  'llama2-70b'=g4f.Provider.Llama2,
-  'dolphin-mixtral-8x7b'=g4f.Provider.DeepInfra
-]
+ai_models = ['gpt-3.5-turbo', 'mixtral-8x22b', 'llama2-70b', 'dolphin-mixtral-8x7b']
+ai_providers = {
+  'gpt-3.5-turbo' == g4f.Provider.Liaobots,
+  'llama2-70b' == g4f.Provider.Llama2,
+  'dolphin-mixtral-8x7b' == g4f.Provider.DeepInfra
+}
 
 gpt35_error_messages = [
   '\u6d41\u91cf\u5f02\u5e38,\u8bf7\u5c1d\u8bd5\u66f4\u6362\u7f51\u7edc\u73af\u5883', 
@@ -33,7 +34,7 @@ def home():
     response = ""
     valid_provider = ""
       
-    for provider in ai_providers:
+    for provider in ai_models:
       print(provider, flush=True)
       
       try:
@@ -41,7 +42,6 @@ def home():
         
         response = client.chat.completions.create(
             model=provider,
-            provider=g4f.Provider.GeekGpt,
             messages=[{"role": "user", "content": txt}],
         )
         
