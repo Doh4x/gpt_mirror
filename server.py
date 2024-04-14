@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 client = Client()
 
-ai_models = ['airoboros-l2-70b-gpt4-1.4.1', 'llama2-70b', 'dolphin-mixtral-8x7b']
+ai_models = ['gpt-3.5-turbo', 'llama2-70b', 'dolphin-mixtral-8x7b']
 
 gpt35_error_messages = [
   '\u6d41\u91cf\u5f02\u5e38,\u8bf7\u5c1d\u8bd5\u66f4\u6362\u7f51\u7edc\u73af\u5883', 
