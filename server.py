@@ -14,8 +14,6 @@ load_dotenv(dotenv_path)
 
 app = Flask(__name__)
 
-client = Client()
-
 ai_models = ['gpt-3.5-long', 'gpt-3.5-turbo', 'llama2-70b', 'dolphin-mixtral-8x7b']
 
 gpt35_error_messages = [
@@ -69,7 +67,7 @@ def single_model_request():
     
     response = ""
     valid_provider = ""
-    maximum_tries = 20
+    maximum_tries = 10
     current_try = 0
     
     while response == "" and current_try < maximum_tries:
@@ -93,12 +91,13 @@ def single_model_request():
         
         break
       finally:
-        break
+        continue
 
+    print(current_try, flush=True)
+    
     if response == "":
        return jsonify({"status": "NOT OK", "text": "Invalid cookies", "provider": ""})
     
-    print(current_try, flush=True)
     return jsonify({"status": "OK", "text": response or "", "provider": valid_provider, "tries_used": current_try})
   else:
     return jsonify({"status": "OK", "text": ""})
