@@ -3,6 +3,7 @@ import os
 from os.path import join, dirname
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
+from waitress import serve
 
 import g4f
 from g4f.client import Client
@@ -23,7 +24,6 @@ gpt35_error_messages = [
 ]
 
 @app.route('/try_models', methods=['GET'])
-
 def try_models():
   if "txt" in request.args:
     txt = request.args['txt']
@@ -67,17 +67,15 @@ def single_model_request():
     txt = request.args['txt']
     model = request.args['model']
     
-    print(txt,flush=True)
-    print(model,flush=True)
-    
     response = ""
     valid_provider = ""
+    maximum_tries = 20
+    current_try = 0
     
-    while response == "":
-       response = ""
-       valid_provider = ""
-  
-       try:
+    while response == "" and current_try < maximum_tries:
+      current_try += 1
+      
+      try:
         client = Client()
         
         response = client.chat.completions.create(
@@ -85,23 +83,27 @@ def single_model_request():
             messages=[{"role": "user", "content": txt}],
         )
         
-        print(response.choices[0].message.content, flush=True)
-        
         if response.choices[0].message.content in gpt35_error_messages:
-          return response, valid_provider
+          response = ""
+          
+          continue
             
         response = response.choices[0].message.content
-        valid_provider = provider
-       finally:
-        return response, valid_provider
+        valid_provider = model
+        
+        break
+      finally:
+        break
 
     if response == "":
        return jsonify({"status": "NOT OK", "text": "Invalid cookies", "provider": ""})
     
-    return jsonify({"status": "OK", "text": response or "", "provider": valid_provider})
+    print(current_try, flush=True)
+    return jsonify({"status": "OK", "text": response or "", "provider": valid_provider, "tries_used": current_try})
   else:
     return jsonify({"status": "OK", "text": ""})
   
+
 @app.route('/', methods=['HEAD'])
 
 def head():
@@ -109,5 +111,5 @@ def head():
     response.headers.add('alive', 'OK')
     return response
 
-app.run(debug=False,port=3000,host="0.0.0.0")
-#serve(app, host="0.0.0.0", port=3000)
+#app.run(debug=False,port=3000,host="0.0.0.0")
+serve(app, host="0.0.0.0", port=3000)
