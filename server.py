@@ -13,20 +13,11 @@ load_dotenv(dotenv_path)
 app = Flask(__name__)
 client = Client()
 
-ai_providers = ['gpt-3.5-turbo', 'llama2-70b', 'gpt-4', 'dolphin-mixtral-8x7b']
+ai_providers = ['gpt-3.5-turbo', 'openchat_3.5', 'llama2-70b', 'gpt-4', 'dolphin-mixtral-8x7b']
 gpt35_error_messages = [
   '\u6d41\u91cf\u5f02\u5e38,\u8bf7\u5c1d\u8bd5\u66f4\u6362\u7f51\u7edc\u73af\u5883', 
   '\u5f53\u524d\u5730\u533a\u5f53\u65e5\u989d\u5ea6\u5df2\u6d88\u8017\u5b8c, \u8bf7\u5c1d\u8bd5\u66f4\u6362\u7f51\u7edc\u73af\u5883'
                        ]
-
-
-set_cookies(".google.com", {
-   "__Secure-1PSID": os.environ.get('__Secure-1PSID'),
-   "__Secure-1PSIDCC": os.environ.get('__Secure-1PSIDCC'),
-   "__Secure-1PSIDTS": os.environ.get('__Secure-1PSIDTS'),
-   "SSID": os.environ.get('SSID'),
-})
-
   
 @app.route('/', methods=['GET'])
 
