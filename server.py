@@ -22,8 +22,8 @@ gpt35_error_messages = [
 ]
 
 def PrintArgs():
-   for key, value in request.args.lists().items():
-     print(key, flush=True); print(value, flush=True)
+   for key, value in request.args.lists():
+     print(key + " - " + str(value), flush=True)
     
 @app.route('/try_models', methods=['GET'])
 
@@ -109,6 +109,8 @@ def single_model_request():
 @app.route('/hybrid', methods=['GET'])
 
 def hybrid_request():
+  print(request.args['txt'], flush=True)
+  
   response = ""
   
   if "txt" in request.args:
