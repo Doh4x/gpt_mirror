@@ -21,10 +21,14 @@ gpt35_error_messages = [
   '\u5f53\u524d\u5730\u533a\u5f53\u65e5\u989d\u5ea6\u5df2\u6d88\u8017\u5b8c, \u8bf7\u5c1d\u8bd5\u66f4\u6362\u7f51\u7edc\u73af\u5883'
 ]
 
+def PrintArgs():
+   for value in request.args.listvalues():
+     print(value, flush=True)
+    
 @app.route('/try_models', methods=['GET'])
 
 def try_models():
-  print(request.args, flush=True)
+  PrintArgs()
   
   if "txt" in request.args:
     txt = request.args['txt']
@@ -62,7 +66,7 @@ def try_models():
 @app.route('/try_single_model', methods=['GET'])
 
 def single_model_request():
-  print(request.args, flush=True)
+  PrintArgs()
   
   if "txt" and "model" in request.args:
     txt = request.args['txt']
