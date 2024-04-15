@@ -79,7 +79,7 @@ def single_model_request():
         client = Client()
         
         response = client.chat.completions.create(
-            model="dolphin-mixtral-8x7b",
+            model=model,
             messages=[{"role": "user", "content": txt}],
         )
         
