@@ -1,9 +1,9 @@
 import os
-import json
+import json as standart_json
 
 from os.path import join, dirname
 from dotenv import load_dotenv
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, json
 from waitress import serve
 
 import g4f
@@ -53,11 +53,11 @@ def try_models():
         continue
 
     if response == "":
-       return json.dumps({"status": "NOT OK", "text": "Invalid cookies", "provider": "", "tries_used": "1"})
+       return jsonify({"status": "NOT OK", "text": "Invalid cookies", "provider": "", "tries_used": "1"})
     
-    return json.dumps({"status": "OK", "text": response or "", "provider": valid_provider})
+    return jsonify({"status": "OK", "text": response or "", "provider": valid_provider})
   else:
-    return json.dumps({"status": "OK", "text": "", "provider": "", "tries_used": "1"})
+    return jsonify({"status": "OK", "text": "", "provider": "", "tries_used": "1"})
 
 @app.route('/try_single_model', methods=['GET'])
 
@@ -98,22 +98,19 @@ def single_model_request():
     if response == "":
        return try_models()
     
-    return json.dumps({"status": "OK", "text": response or "", "provider": valid_provider, "tries_used": current_try})
+    return jsonify({"status": "OK", "text": response or "", "provider": valid_provider, "tries_used": current_try})
   else:
-    return json.dumps({"status": "OK", "text": "", "provider": "", "tries_used": "1"})
+    return jsonify({"status": "OK", "text": "", "provider": "", "tries_used": "1"})
 
 @app.route('/hybrid', methods=['GET'])
 
 def hybrid_request():
-  print(request.args, flush=True)
-  
   response = ""
-  print(jsonify(response), flush=True)
   
   if "txt" in request.args:
     response = single_model_request()
   
-  if json.loads(response)["text"] == "":
+  if response == "" or standart_json.loads(response.get_data(as_text=True))["text"] == "":
     return try_models()
   else:
     return response
