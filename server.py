@@ -74,10 +74,12 @@ def single_model_request():
       current_try += 1
       
       try:
+        print(current_try, flush=True)
+        
         client = Client()
         
         response = client.chat.completions.create(
-            model=model,
+            model="dolphin-mixtral-8x7b",
             messages=[{"role": "user", "content": txt}],
         )
         
