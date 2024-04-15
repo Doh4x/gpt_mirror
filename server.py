@@ -1,4 +1,5 @@
 import os
+import json
 
 from os.path import join, dirname
 from dotenv import load_dotenv
@@ -23,6 +24,8 @@ gpt35_error_messages = [
 @app.route('/try_models', methods=['GET'])
 
 def try_models():
+  print(request.args, flush=True)
+  
   if "txt" in request.args:
     txt = request.args['txt']
     response = ""
@@ -50,15 +53,17 @@ def try_models():
         continue
 
     if response == "":
-       return jsonify({"status": "NOT OK", "text": "Invalid cookies", "provider": "", "tries_used": "1"})
+       return json.dumps({"status": "NOT OK", "text": "Invalid cookies", "provider": "", "tries_used": "1"})
     
-    return jsonify({"status": "OK", "text": response or "", "provider": valid_provider})
+    return json.dumps({"status": "OK", "text": response or "", "provider": valid_provider})
   else:
-    return jsonify({"status": "OK", "text": "", "provider": "", "tries_used": "1"})
+    return json.dumps({"status": "OK", "text": "", "provider": "", "tries_used": "1"})
 
 @app.route('/try_single_model', methods=['GET'])
 
 def single_model_request():
+  print(request.args, flush=True)
+  
   if "txt" and "model" in request.args:
     txt = request.args['txt']
     model = request.args['model']
@@ -93,19 +98,22 @@ def single_model_request():
     if response == "":
        return try_models()
     
-    return jsonify({"status": "OK", "text": response or "", "provider": valid_provider, "tries_used": current_try})
+    return json.dumps({"status": "OK", "text": response or "", "provider": valid_provider, "tries_used": current_try})
   else:
-    return jsonify({"status": "OK", "text": "", "provider": "", "tries_used": "1"})
+    return json.dumps({"status": "OK", "text": "", "provider": "", "tries_used": "1"})
 
 @app.route('/hybrid', methods=['GET'])
 
 def hybrid_request():
+  print(request.args, flush=True)
+  
   response = ""
-    
+  print(jsonify(response), flush=True)
+  
   if "txt" in request.args:
     response = single_model_request()
   
-  if response.text == "":
+  if json.loads(response)["text"] == "":
     return try_models()
   else:
     return response
