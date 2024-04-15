@@ -29,8 +29,6 @@ def try_models():
     valid_provider = ""
     
     for provider in ai_models:
-      print(provider, flush=True)
-      
       try:
         client = Client()
         
@@ -52,11 +50,11 @@ def try_models():
         continue
 
     if response == "":
-       return jsonify({"status": "NOT OK", "text": "Invalid cookies", "provider": ""})
+       return jsonify({"status": "NOT OK", "text": "Invalid cookies", "provider": "", "tries_used": "1"})
     
     return jsonify({"status": "OK", "text": response or "", "provider": valid_provider})
   else:
-    return jsonify({"status": "OK", "text": ""})
+    return jsonify({"status": "OK", "text": "", "provider": "", "tries_used": "1"})
 
 @app.route('/try_single_model', methods=['GET'])
 
@@ -74,8 +72,6 @@ def single_model_request():
       current_try += 1
       
       try:
-        print(current_try, flush=True)
-        
         client = Client()
         
         response = client.chat.completions.create(
@@ -85,7 +81,6 @@ def single_model_request():
         
         if response.choices[0].message.content in gpt35_error_messages:
           response = ""
-          
           continue
             
         response = response.choices[0].message.content
@@ -95,15 +90,25 @@ def single_model_request():
       finally:
         continue
 
-    print(current_try, flush=True)
-    print(response, flush=True)
-      
     if response == "":
-       return jsonify({"status": "NOT OK", "text": "Invalid cookies", "provider": ""})
+       return try_models()
     
     return jsonify({"status": "OK", "text": response or "", "provider": valid_provider, "tries_used": current_try})
   else:
-    return jsonify({"status": "OK", "text": ""})
+    return jsonify({"status": "OK", "text": "", "provider": "", "tries_used": "1"})
+
+@app.route('/hybrid', methods=['GET'])
+
+def hybrid_request():
+  response = ""
+    
+  if "txt" in request.args:
+    response = single_model_request()
+  
+  if response.text == "":
+    return try_models()
+  else:
+    return response
 
 @app.route('/awake', methods=['GET'])
 
