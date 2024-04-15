@@ -94,7 +94,8 @@ def single_model_request():
         continue
 
     print(current_try, flush=True)
-    
+    print(response, flush=True)
+      
     if response == "":
        return jsonify({"status": "NOT OK", "text": "Invalid cookies", "provider": ""})
     
