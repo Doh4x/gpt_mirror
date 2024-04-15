@@ -22,8 +22,8 @@ gpt35_error_messages = [
 ]
 
 def PrintArgs():
-   for value in request.args.listvalues():
-     print(value, flush=True)
+   for key, value in request.args.lists().items():
+     print(key, flush=True); print(value, flush=True)
     
 @app.route('/try_models', methods=['GET'])
 
