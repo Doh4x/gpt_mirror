@@ -127,9 +127,9 @@ def game_story_config():
  print(request.args['txt'], flush=True)
 
  response = ""
-  
  
-  
+ hybrid_request()
+
 @app.route('/awake', methods=['GET'])
 
 def awake():
