@@ -1,6 +1,6 @@
 import json as standart_json
 
-import fixed
+from ..PyCode import fixed
 
 from g4f.client import Client
 from g4f.cookies import set_cookies

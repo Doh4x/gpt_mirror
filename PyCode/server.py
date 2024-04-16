@@ -3,8 +3,7 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify, Response
 from waitress import serve
 
-import request_functions
-import config
+from ..PyCode import request_functions
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
