@@ -1,6 +1,5 @@
-import json as standart_json
 
-from ..PyCode import fixed
+from . import config
 
 from g4f.client import Client
 from g4f.cookies import set_cookies
@@ -17,7 +16,7 @@ def try_models(txt: str):
     response = ""
     valid_provider = ""
 
-    for provider in fixed["ai_models"]:
+    for provider in config["ai_models"]:
         try:
             client = Client()
 
@@ -28,7 +27,7 @@ def try_models(txt: str):
 
             print(response.choices[0].message.content, flush=True)
 
-            if response.choices[0].message.content in fixed["gpt35_error_messages"]:
+            if response.choices[0].message.content in config["gpt35_error_messages"]:
                 continue
 
             response = response.choices[0].message.content
@@ -61,7 +60,7 @@ def single_model_request(txt: str, model: str):
                 messages=[{"role": "user", "content": txt}],
             )
 
-            if response.choices[0].message.content in fixed["gpt35_error_messages"]:
+            if response.choices[0].message.content in config["gpt35_error_messages"]:
                 response = ""
                 continue
 
