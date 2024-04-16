@@ -35,7 +35,7 @@ def hybrid_request():
     response = ""
 
     if "txt" in request.args:
-        return request_functions.hybrid_request(txt=request.args.get("txt"), model=request.args.get("model"))
+        return request_functions.hybrid_request(txt=request.args.get("txt"), model=request.args.get("model") or "")
     else:
         return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "1"})
 
