@@ -121,6 +121,15 @@ def hybrid_request():
   else:
     return response
 
+@app.route('/get_stoty', methods=['GET'])
+
+def game_story_config():
+ print(request.args['txt'], flush=True)
+
+ response = ""
+  
+ 
+  
 @app.route('/awake', methods=['GET'])
 
 def awake():
@@ -128,12 +137,11 @@ def awake():
     response.headers.add('alive', 'OK')
     return response
 
-@app.route('/', methods=['HEAD'])
+@app.route('/', methods=['GET'])
 
 def head():
     response = Response()
     response.headers.add('alive', 'OK')
     return response
 
-#app.run(debug=False,port=3000,host="0.0.0.0")
 serve(app, host="0.0.0.0", port=3000)
