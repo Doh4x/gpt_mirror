@@ -41,16 +41,12 @@ def hybrid_request():
 
 @app.route('/awake', methods=['GET'])
 def awake():
-    response = Response()
-    response.headers.add('alive', 'OK')
-    return response
+    return jsonify({"status": "OK", "running": "true"})
 
 
 @app.route('/', methods=['GET'])
 def head():
-    response = Response()
-    response.headers.add('alive', 'OK')
-    return response
+    return jsonify({"status": "OK", "running": "true"})
 
 
 serve(app, host="0.0.0.0", port=3000)
