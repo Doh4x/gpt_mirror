@@ -1,5 +1,7 @@
 import g4f
 
+ai_introduction = "IN ANY CASE, DO NOT ANSWER IN ANY OTHER LANGUAGE EXCEPT WHAT IS INDICATED FURTHER IN THE PROMPT!"
+
 ai_models = {
             # GPT-3.5 4K Context
             "gpt_35_turbo" : g4f.models.gpt_35_turbo,
@@ -14,12 +16,8 @@ ai_models = {
             "llama2_70b" : g4f.models.llama2_70b,
             
             # Mixtral
-            "mixtral-8x22b" : g4f.models.mixtral_8x22b,
-            
-            # GigaChat
-            "gigachat" : g4f.models.gigachat,
-            "gigachat_plus": g4f.models.gigachat_plus,
-            "gigachat_pro" : g4f.models.gigachat_pro,
+            "mixtral_8x7b" : g4f.models.mixtral_8x7b,
+            "mixtral_8x22b" : g4f.models.mixtral_8x22b,
 
             # GPT-4 8K Context
             # g4f.models.gpt_4,

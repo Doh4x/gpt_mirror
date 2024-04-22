@@ -9,6 +9,7 @@ import pkg_resources
         
 sys.path.append(os.getcwd())
 from . import request_functions
+from . import config
 
 application = Flask(__name__)
 
@@ -17,7 +18,7 @@ def try_models():
     request_functions.PrintArgs(request=request)
 
     if "txt" in request.args:
-        return request_functions.try_models(txt=request.args["txt"])
+        return request_functions.try_models(txt=config.ai_introduction + request.args["txt"])
     else:
         return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "1"})
 
@@ -27,7 +28,7 @@ def single_model_request():
     request_functions.PrintArgs(request=request)
 
     if "txt" and "model" in request.args:
-        return request_functions.single_model_request(txt=request.args["txt"], model=request.args["model"])
+        return request_functions.single_model_request(txt=config.ai_introduction + request.args["txt"], model=request.args["model"])
     else:
         return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "1"})
 
@@ -36,7 +37,7 @@ def hybrid_request():
     response = ""
 
     if "txt" in request.args:
-        return request_functions.hybrid_request(txt=request.args.get("txt"), model=request.args.get("model") or "")
+        return request_functions.hybrid_request(txt=config.ai_introduction + request.args.get("txt"), model=request.args.get("model") or "")
     else:
         return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "1"})
 
