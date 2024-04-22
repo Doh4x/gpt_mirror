@@ -31,17 +31,6 @@ def single_model_request():
     else:
         return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "1"})
 
-
-@application.route('/try_gpt', methods=['GET'])
-def try_gpt_request():
-    response = ""
-
-    if "txt" in request.args:
-        return request_functions.try_gpt(txt=request.args.get("txt"))
-    else:
-        return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "1"})
-
-
 @application.route('/hybrid', methods=['GET'])
 def hybrid_request():
     response = ""

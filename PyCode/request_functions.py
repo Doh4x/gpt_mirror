@@ -50,7 +50,6 @@ def try_models(txt: str):
 
 def single_model_request(txt: str, model: str):
     response = ""
-    valid_provider = ""
     maximum_tries = 10
     current_try = 0
 
@@ -71,7 +70,6 @@ def single_model_request(txt: str, model: str):
                 continue
 
             response = response.choices[0].message.content
-            valid_provider = model
 
             break
         finally:
@@ -91,36 +89,6 @@ def hybrid_request(txt: str, model: str):
     else:
         return response
 
-def try_gpt(txt: str):
-    response = ""
-    valid_provider = ""
-
-    for key, provider in config.ai_models.items():
-        try:
-            client = Client()
-
-            response = client.chat.completions.create(
-                model=provider,
-                messages=[{"role": "user", "content": txt}],
-            )
-
-            if response.choices[0].message.content in config.gpt35_error_messages:
-                response = ""
-
-                continue
-
-            response = response.choices[0].message.content
-            valid_provider = provider
-
-            break
-        except:
-            continue
-
-    if response == "":
-        return jsonify({"status": "NOT OK", "text": "Invalid cookies", "provider": "", "tries_used": "1"})
-
-    return jsonify({"status": "OK", "text": response or "", "provider": valid_provider})
-
 def start_test():
     async def test(model: g4f.Model):
         print("---- TESTING ----", model.name, flush=True)
@@ -130,7 +98,7 @@ def start_test():
                 for response in g4f.ChatCompletion.create(
                         model=model,
                         messages=[
-                            {"role": "user", "content": "write a poem about a tree"}],
+                            {"role": "user", "content": "write a very short story about a tree"}],
                         temperature=1,
                         stream=False
                 ):
@@ -141,7 +109,7 @@ def start_test():
                 for response in await g4f.ChatCompletion.create_async(
                         model=model,
                         messages=[
-                            {"role": "user", "content": "write a poem about a tree"}],
+                            {"role": "user", "content": "write a very short story about a tree"}],
                         temperature=1,
                         stream=False
                 ):

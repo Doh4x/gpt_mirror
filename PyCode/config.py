@@ -15,8 +15,12 @@ ai_models = {
             
             # Mixtral
             "mixtral-8x22b" : g4f.models.mixtral_8x22b,
-            "mistral-7b" : g4f.models.mistral_7b,
             
+            # GigaChat
+            "gigachat" : g4f.models.gigachat,
+            "gigachat_plus": g4f.models.gigachat_plus,
+            "gigachat_pro" : g4f.models.gigachat_pro,
+
             # GPT-4 8K Context
             # g4f.models.gpt_4,
             # g4f.models.gpt_4_0613,
@@ -27,6 +31,6 @@ ai_models = {
 }
         
 gpt35_error_messages = [
-    '\u6d41\u91cf\u5f02\u5e38,\u8bf7\u5c1d\u8bd5\u66f4\u6362\u7f51\u7edc\u73af\u5883',
-    '\u5f53\u524d\u5730\u533a\u5f53\u65e5\u989d\u5ea6\u5df2\u6d88\u8017\u5b8c, \u8bf7\u5c1d\u8bd5\u66f4\u6362\u7f51\u7edc\u73af\u5883'
+    "\u6d41\u91cf\u5f02\u5e38,\u8bf7\u5c1d\u8bd5\u66f4\u6362\u7f51\u7edc\u73af\u5883",
+    "\u5f53\u524d\u5730\u533a\u5f53\u65e5\u989d\u5ea6\u5df2\u6d88\u8017\u5b8c, \u8bf7\u5c1d\u8bd5\u66f4\u6362\u7f51\u7edc\u73af\u5883"
 ]
