@@ -3,6 +3,7 @@ import json as standart_json
 
 import sys
 import pkg_resources
+import urllib.request
 
 from g4f.client import Client
 
@@ -89,6 +90,20 @@ def hybrid_request_function(txt: str, model: str):
 
 application = Flask(__name__)
 
+@application.route('/get_game_stats', methods=['GET'])
+def get_game_stats():
+    if "universe_id" in request.args:
+        response = ""
+
+        try:
+            response = urllib.request.urlopen("https://games.roblox.com/v1/games?universeIds=" + request.args["universe_id"]).read()
+        except Exception as e:
+            return jsonify({"status": "NOT OK", "error": "<p>Error: %s</p>" % str(e)})
+
+        return jsonify({"status": "OK", "text": str(response)})
+    else:
+        return jsonify({"status": "NOT OK", "text": ""})
+    
 @application.route('/try_models', methods=['GET'])
 def try_models():
     if "txt" in request.args:
@@ -101,7 +116,7 @@ def try_models():
 
         return ai_response
     else:
-        return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "1"})
+        return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "0"})
 
 
 @application.route('/try_single_model', methods=['GET'])
@@ -109,7 +124,7 @@ def single_model_request():
     if "txt" and "model" in request.args:
         return single_model_request_function(txt=request.args["txt"], model=request.args["model"])
     else:
-        return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "1"})
+        return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "0"})
 
 
 @application.route('/hybrid', methods=['GET'])
@@ -119,13 +134,13 @@ def hybrid_request():
     if "txt" in request.args:
         return hybrid_request_function(txt=request.args.get("txt"), model=request.args.get("model") or "")
     else:
-        return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "1"})
+        return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "0"})
 
 @application.route('/awake', methods=['GET'])
 def awake():
     return jsonify({"status": "OK", "running": "true"})
 
-@application.route('/test', methods=['GET'])
+@application.route('/test_g4f', methods=['GET'])
 def test():
     try:
         import g4f
@@ -138,7 +153,7 @@ def test():
 @application.route('/', methods=['GET'])
 def head():
     installed_packages = [i.key for i in pkg_resources.working_set]
-    return jsonify({"status": "OK", "running": "true", "python" : sys.version, "packages" : installed_packages})
+    return jsonify({"status": "OK", "running": "true"})
 
 if __name__ == "__main__":
-    application.run(host='0.0.0.0',debug=True)
+    application.run(host='0.0.0.0')

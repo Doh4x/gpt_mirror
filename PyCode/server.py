@@ -1,16 +1,18 @@
 from os.path import join, dirname
-from dotenv import load_dotenv
-from flask import Flask, request, jsonify, Response
-from waitress import serve
+from flask import Flask, request, jsonify
+from pathlib import Path
 
+import os
+import sys
+import urllib
+import pkg_resources
+        
+sys.path.append(os.getcwd())
 from . import request_functions
 
-dotenv_path = join(dirname(__file__), '.env')
-load_dotenv(dotenv_path)
+application = Flask(__name__)
 
-app = Flask(__name__)
-
-@app.route('/try_models', methods=['GET'])
+@application.route('/try_models', methods=['GET'])
 def try_models():
     request_functions.PrintArgs(request=request)
 
@@ -20,7 +22,7 @@ def try_models():
         return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "1"})
 
 
-@app.route('/try_single_model', methods=['GET'])
+@application.route('/try_single_model', methods=['GET'])
 def single_model_request():
     request_functions.PrintArgs(request=request)
 
@@ -30,7 +32,17 @@ def single_model_request():
         return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "1"})
 
 
-@app.route('/hybrid', methods=['GET'])
+@application.route('/try_gpt', methods=['GET'])
+def try_gpt_request():
+    response = ""
+
+    if "txt" in request.args:
+        return request_functions.try_gpt(txt=request.args.get("txt"))
+    else:
+        return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "1"})
+
+
+@application.route('/hybrid', methods=['GET'])
 def hybrid_request():
     response = ""
 
@@ -39,14 +51,41 @@ def hybrid_request():
     else:
         return jsonify({"status": "NOT OK", "text": "", "provider": "", "tries_used": "1"})
 
-@app.route('/awake', methods=['GET'])
+
+@application.route('/awake', methods=['GET'])
 def awake():
     return jsonify({"status": "OK", "running": "true"})
 
 
-@app.route('/', methods=['GET'])
+@application.route('/asincio_test', methods=['GET'])
+def asincio_test():
+    return jsonify({"result": "OK", "running": "true", "working_models": request_functions.start_test()})
+
+@application.route('/get_game_stats', methods=['GET'])
+def get_game_stats():
+    if "universe_id" in request.args:
+        response = ""
+
+        try:
+            response = urllib.request.urlopen("https://games.roblox.com/v1/games?universeIds=" + request.args["universe_id"]).read()
+        except Exception as e:
+            return jsonify({"status": "NOT OK", "error": "<p>Error: %s</p>" % str(e)})
+
+        return jsonify({"status": "OK", "text": str(response)})
+    else:
+        return jsonify({"status": "NOT OK", "text": ""})
+
+@application.route('/test', methods=['GET'])
+def test():
+    try:
+        return jsonify({"result": "OK", "running": "true", "working_models": request_functions.start_test()})
+    except Exception as e:
+        return jsonify({"status": "NOT OK", "running": "true", "error" : "<p>Error: %s</p>" % str(e)})
+
+@application.route('/', methods=['GET', 'HEAD'])
 def head():
-    return jsonify({"status": "OK", "running": "true"})
+    installed_packages = [i.key for i in pkg_resources.working_set]
+    return jsonify({"status": "OK", "running": "true", "packages": installed_packages, "current_path": str(Path(__file__))})
 
-
-serve(app, host="0.0.0.0", port=3000)
+if __name__ == "__main__":
+    application.run(host='0.0.0.0')
